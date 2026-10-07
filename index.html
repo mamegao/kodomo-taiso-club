@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>こども体操クラブ資料ポータル （コース役員向け）</title>
+<title>こども体操クラブ資料ポータル（役員向け）</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,7 @@ header{
     );
     color:white;
     text-align:center;
-    padding:60px 20px;
+    padding:50px 20px;
     border-bottom-left-radius:40px;
     border-bottom-right-radius:40px;
     box-shadow:0 6px 20px rgba(0,0,0,.1);
@@ -42,9 +42,14 @@ header h1{
     font-size:2.2rem;
 }
 
+header h1.sub-head{
+    font-size:1.6rem;
+    margin-top:5px;
+}
+
 .subtitle{
     margin-top:15px;
-    font-size:1.1rem;
+    font-size:1.05rem;
 }
 
 .container{
@@ -53,11 +58,20 @@ header h1{
     padding:30px 20px;
 }
 
+.section-title{
+    font-size:1.3rem;
+    color:#2f7ad3;
+    margin:25px 0 15px 5px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
 .card{
     background:white;
     border-radius:24px;
-    padding:30px;
-    margin-bottom:25px;
+    padding:26px;
+    margin-bottom:20px;
     box-shadow:0 5px 20px rgba(0,0,0,.08);
     transition:0.2s;
 }
@@ -69,21 +83,24 @@ header h1{
 .card h2{
     margin-top:0;
     color:#3578d6;
+    font-size:1.35rem;
 }
 
 .card p{
     line-height:1.8;
+    margin-bottom:10px;
 }
 
 .btn{
     display:inline-block;
-    margin-top:15px;
-    padding:12px 22px;
+    margin-top:10px;
+    padding:10px 22px;
     background:#4a90e2;
     color:white;
     text-decoration:none;
     border-radius:30px;
     font-weight:bold;
+    transition:0.2s;
 }
 
 .btn:hover{
@@ -96,6 +113,7 @@ header h1{
     border-radius:18px;
     padding:22px;
     line-height:1.8;
+    margin-top:30px;
 }
 
 footer{
@@ -107,11 +125,15 @@ footer{
 @media (max-width:600px){
 
     header h1{
-        font-size:1.7rem;
+        font-size:1.6rem;
+    }
+
+    header h1.sub-head{
+        font-size:1.3rem;
     }
 
     .card{
-        padding:22px;
+        padding:20px;
     }
 
     .btn{
@@ -127,72 +149,107 @@ footer{
 
 <header>
     <h1>🤸 こども体操クラブ資料ポータル 🤸</h1>
-　 <h1>コース役員向け</h1>
+    <h1 class="sub-head">（役員向け）</h1>
     <div class="subtitle">
-        施設予約などコース役員向け資料をまとめています
+        各役員の引き継ぎ資料・施設予約マニュアルなどをまとめています
     </div>
 </header>
 
 <div class="container">
 
+    <div class="section-title">👑 役員引継書・おしごと資料</div>
+
+    <div class="card">
+        <h2>👑 会長のおしごと</h2>
+        <p>
+            全体業務の流れ、年間スケジュール、年間休日の調整、
+            行政手続きや各種更新申請などをまとめています。
+        </p>
+        <a href="kaicho.html" class="btn">
+            引継書を見る
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>🌟 副会長のおしごと</h2>
+        <p>
+            会長の補佐、体験希望者の受入対応、ホームページの管理、
+            SNSアカウント情報や広報方針などをまとめています。
+        </p>
+        <a href="fukukaicho.html" class="btn">
+            引継書を見る
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>🏫 運協役員のおしごと</h2>
+        <p>
+            谷戸小学校運営協議会（運協）との連絡やり取り、
+            毎月20日頃の施設使用申請の流れ、定例会参加などをまとめています。
+        </p>
+        <a href="unkyo.html" class="btn">
+            引継書を見る
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>💰 会計のおしごと</h2>
+        <p>
+            2ヶ月ごとの月会費集金スケジュール、年度更新料、
+            講師謝礼・ボーナス、年間予算案・決算書の作成などをまとめています。
+        </p>
+        <a href="kaikei.html" class="btn">
+            引継書を見る
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>🌈 コース役員のおしごと</h2>
+        <p>
+            コース役員が毎回担当するお仕事や、
+            谷戸小学校・公共施設での安全指導・注意事項などをまとめています。
+        </p>
+        <a href="course.html" class="btn">
+            おしごとを見る
+        </a>
+    </div>
+
+    <div class="section-title">📅 施設予約関連資料</div>
+
     <div class="card">
         <h2>📖 施設予約について</h2>
-
         <p>
             施設予約の流れ、担当期間、
             支払い方法などをまとめた説明資料です。
         </p>
-  <a href="reservation.html" class="btn">
-                   マニュアルを見る
+        <a href="reservation.html" class="btn">
+            マニュアルを見る
         </a>
     </div>
 
     <div class="card">
         <h2>📱 かんたん予約操作</h2>
-
         <p>
             実際の画面を見ながら予約方法を確認できます。
-            初めて担当される方はこちらもご覧ください。
+            初めて施設予約を担当される方はこちらをご覧ください。
         </p>
-  <a href="easy-ope.html" class="btn">
-                    操作手順を見る
+        <a href="easy-ope.html" class="btn">
+            操作手順を見る
         </a>
     </div>
-<div class="card">
-    <h2>🌈 コース役員のおしごと</h2>
-    <p>
-        コース役員が担当するお仕事や、
-        谷戸小学校・公共施設での対応、
-        注意事項などをまとめています。
-    </p>
-
-    <a href="course.html" class="btn">
-        おしごとを見る
-    </a>
-</div>
 
     <div class="info">
         <strong>💡 はじめての方へ</strong>
         <br><br>
-
-        ① 「施設予約について」を読んで全体像を確認
-        <br>
-        ↓
-        <br>
-        ② 「かんたん予約操作」で実際の予約方法を確認
-        <br>
-        ↓
-        <br>
-        ③ 施設予約を実施
-        <br><br>
-        ※たまに「コース役員のおしごと」に目を通す
+        ご自身の担当役員のページをひらいて、業務の流れをご確認ください♪<br>
+        施設予約を担当される方は「施設予約について」「かんたん予約操作」も合わせてご活用ください。
     </div>
 
 </div>
+
 <footer>
     © 谷戸こども体操クラブ
 </footer>
 
 </body>
 </html>
-
