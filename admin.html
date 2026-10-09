@@ -67,7 +67,6 @@ body{
     border-color: #34495e;
 }
 
-/* 表示切替ボタン */
 .toggle-btn {
     position: absolute;
     right: 10px;
@@ -83,9 +82,7 @@ body{
     transition: 0.2s;
 }
 
-.toggle-btn:hover {
-    opacity: 1;
-}
+.toggle-btn:hover { opacity: 1; }
 
 .auth-btn {
     width: 100%;
@@ -188,11 +185,11 @@ header p { margin-top: 8px; font-size: 0.95rem; opacity: 0.8; }
 
 <body>
 
-<!-- 🔐 管理者ログインモーダル（パスワード: 1000d@） -->
+<!-- 🔐 管理者ログインモーダル -->
 <div id="admin-auth-modal">
     <div class="auth-card">
         <h2>🔒 管理者認証</h2>
-        <p>管理者用パスワードを入力してください。</p>
+        <p id="authNotice">管理者用パスワードを入力してください。</p>
         
         <div class="password-wrapper">
             <input type="password" id="adminPassInput" class="auth-input" placeholder="パスワード" onkeydown="if(event.key==='Enter') checkAdminPassword()">
@@ -276,24 +273,57 @@ header p { margin-top: 8px; font-size: 0.95rem; opacity: 0.8; }
 </div>
 
 <script>
-// 🔐 管理者用パスワード設定
 const ADMIN_PASSWORD = "1000d@";
+const TIMEOUT_LIMIT = 5 * 60 * 1000; // ⏱️ 自動ロック時間（ミリ秒指定：5分）
+let idleTimer;
 
-if (sessionStorage.getItem('taiso_admin_auth') === 'true') {
-    document.getElementById('admin-auth-modal').style.display = 'none';
+// 初期判定：過去にログイン済みで、かつ5分以内ならロック解除
+const isAuth = sessionStorage.getItem('taiso_admin_auth') === 'true';
+const lastActivity = parseInt(sessionStorage.getItem('taiso_admin_last_active') || '0', 10);
+
+if (isAuth && (Date.now() - lastActivity < TIMEOUT_LIMIT)) {
+    unlockPage();
 }
 
 function checkAdminPassword() {
     const input = document.getElementById('adminPassInput').value;
     if (input === ADMIN_PASSWORD) {
         sessionStorage.setItem('taiso_admin_auth', 'true');
-        document.getElementById('admin-auth-modal').style.display = 'none';
+        unlockPage();
     } else {
         document.getElementById('adminErrorMsg').style.display = 'block';
     }
 }
 
-// 👁️ パスワードの表示・非表示切り替え
+// 🔓 ロック解除＆タイマー開始
+function unlockPage() {
+    document.getElementById('admin-auth-modal').style.display = 'none';
+    document.getElementById('adminPassInput').value = '';
+    document.getElementById('adminErrorMsg').style.display = 'none';
+    resetTimer();
+    
+    // 画面操作の検知イベントを登録
+    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+        window.addEventListener(evt, resetTimer, { passive: true });
+    });
+}
+
+// ⏱️ タイマーリセット（操作があったら伸ばす）
+function resetTimer() {
+    sessionStorage.setItem('taiso_admin_last_active', Date.now().toString());
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(lockPage, TIMEOUT_LIMIT);
+}
+
+// 🔒 自動ロック実行
+function lockPage() {
+    sessionStorage.removeItem('taiso_admin_auth');
+    sessionStorage.removeItem('taiso_admin_last_active');
+    document.getElementById('authNotice').textContent = '⏱️ 無操作が続いたためロックされました。再度パスワードを入力してください。';
+    document.getElementById('admin-auth-modal').style.display = 'flex';
+}
+
+// 👁️ パスワード表示切替
 function togglePassVisibility() {
     const passInput = document.getElementById('adminPassInput');
     const toggleBtn = document.getElementById('toggleBtn');
@@ -301,11 +331,9 @@ function togglePassVisibility() {
     if (passInput.type === 'password') {
         passInput.type = 'text';
         toggleBtn.textContent = '🙈';
-        toggleBtn.title = 'パスワードを隠す';
     } else {
         passInput.type = 'password';
         toggleBtn.textContent = '👁️';
-        toggleBtn.title = 'パスワードを表示';
     }
 }
 </script>
