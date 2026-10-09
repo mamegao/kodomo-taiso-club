@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>管理者専用ページ | 谷戸こども体操クラブ</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{ box-sizing:border-box; }
+body{
+    margin:0;
+    font-family:"Zen Maru Gothic",sans-serif;
+    background:linear-gradient(180deg,#fffdf7,#f4f6f9);
+    color:#444;
+}
+
+/* 🔐 管理者認証モーダル */
+#admin-auth-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(44, 62, 80, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-card {
+    background: white;
+    padding: 35px 25px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+}
+
+.auth-card h2 { color: #2c3e50; margin-top:0; }
+.auth-card p { font-size:0.9rem; color:#666; margin-bottom:20px; }
+
+/* 👁 パスワード入力用コンテナ */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    font-family: "Zen Maru Gothic", sans-serif;
+    outline: none;
+}
+
+.auth-input:focus {
+    border-color: #34495e;
+}
+
+/* 表示切替ボタン */
+.toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    user-select: none;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+.toggle-btn:hover {
+    opacity: 1;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: #34495e;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: "Zen Maru Gothic", sans-serif;
+}
+
+.auth-btn:hover { background: #1a252f; }
+.error-msg { color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none; font-weight: bold; }
+
+header{
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+header h1 { margin: 0; font-size: 1.8rem; }
+header p { margin-top: 8px; font-size: 0.95rem; opacity: 0.8; }
+
+.container{
+    max-width: 800px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.card{
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border-left: 6px solid #34495e;
+}
+
+.card.insta { border-left-color: #e1306c; }
+.card.gmail { border-left-color: #ea4335; }
+.card.yoyaku { border-left-color: #3498db; }
+
+.card h2 { margin-top: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+.card.insta h2 { color: #c13584; }
+.card.gmail h2 { color: #d93025; }
+.card.yoyaku h2 { color: #2980b9; }
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.info-table th, .info-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 0.95rem;
+}
+
+.info-table th {
+    width: 35%;
+    color: #666;
+    background: #fdfdfd;
+}
+
+.info-table td {
+    font-weight: bold;
+    color: #2c3e50;
+    word-break: break-all;
+}
+
+.note {
+    font-size: 0.85rem;
+    color: #e67e22;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #7f8c8d;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+.btn-back:hover { background: #95a5a6; }
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 管理者ログインモーダル（パスワード: 1000d@） -->
+<div id="admin-auth-modal">
+    <div class="auth-card">
+        <h2>🔒 管理者認証</h2>
+        <p>管理者用パスワードを入力してください。</p>
+        
+        <div class="password-wrapper">
+            <input type="password" id="adminPassInput" class="auth-input" placeholder="パスワード" onkeydown="if(event.key==='Enter') checkAdminPassword()">
+            <button type="button" class="toggle-btn" onclick="togglePassVisibility()" id="toggleBtn" title="パスワードを表示">👁️</button>
+        </div>
+
+        <button class="auth-btn" onclick="checkAdminPassword()">認証して進む</button>
+        <div id="adminErrorMsg" class="error-msg">パスワードが正しくありません</div>
+    </div>
+</div>
+
+<header>
+    <h1>🔐 管理者専用アカウント情報</h1>
+    <p>公式SNS・メール・施設予約のログインアカウント情報一覧</p>
+</header>
+
+<div class="container">
+
+    <!-- 📸 Instagram -->
+    <div class="card insta">
+        <h2>📸 Instagram（広報・更新用）</h2>
+        <p class="note">※役員でインスタ更新を行う際にご利用ください。</p>
+        <table class="info-table">
+            <tr>
+                <th>アカウント (Mail)</th>
+                <td>kodomo_taiso_club@yahoo.co.jp</td>
+            </tr>
+            <tr>
+                <th>パスワード</th>
+                <td>yato7777</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ✉️ Gmail -->
+    <div class="card gmail">
+        <h2>✉️ Google (Gmail) アカウント</h2>
+        <table class="info-table">
+            <tr>
+                <th>メールアドレス</th>
+                <td>kodomo.taiso.club1979@gmail.com</td>
+            </tr>
+            <tr>
+                <th>生年月日</th>
+                <td>1979年1月1日</td>
+            </tr>
+            <tr>
+                <th>パスワード</th>
+                <td>yato-1000da</td>
+            </tr>
+            <tr>
+                <th>確認用サブメール</th>
+                <td>kodomo_taiso_club@outlook.jp</td>
+            </tr>
+            <tr>
+                <th>サブメール パスワード</th>
+                <td>yato-1000dada</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 🏛️ 施設予約 -->
+    <div class="card yoyaku">
+        <h2>🏛️ 施設予約システム</h2>
+        <table class="info-table">
+            <tr>
+                <th>利用者ID</th>
+                <td>25003365</td>
+            </tr>
+            <tr>
+                <th>パスワード</th>
+                <td>yato7777</td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="index.html" class="btn-back">← ポータルトップへ戻る</a>
+    </div>
+
+</div>
+
+<script>
+// 🔐 管理者用パスワード設定
+const ADMIN_PASSWORD = "1000d@";
+
+if (sessionStorage.getItem('taiso_admin_auth') === 'true') {
+    document.getElementById('admin-auth-modal').style.display = 'none';
+}
+
+function checkAdminPassword() {
+    const input = document.getElementById('adminPassInput').value;
+    if (input === ADMIN_PASSWORD) {
+        sessionStorage.setItem('taiso_admin_auth', 'true');
+        document.getElementById('admin-auth-modal').style.display = 'none';
+    } else {
+        document.getElementById('adminErrorMsg').style.display = 'block';
+    }
+}
+
+// 👁️ パスワードの表示・非表示切り替え
+function togglePassVisibility() {
+    const passInput = document.getElementById('adminPassInput');
+    const toggleBtn = document.getElementById('toggleBtn');
+    
+    if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleBtn.textContent = '🙈';
+        toggleBtn.title = 'パスワードを隠す';
+    } else {
+        passInput.type = 'password';
+        toggleBtn.textContent = '👁️';
+        toggleBtn.title = 'パスワードを表示';
+    }
+}
+</script>
+
+</body>
+</html>

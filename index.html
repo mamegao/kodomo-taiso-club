@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -65,6 +64,7 @@ header h1.sub-head{
     display:flex;
     align-items:center;
     gap:8px;
+    font-weight:bold;
 }
 
 .card{
@@ -76,10 +76,6 @@ header h1.sub-head{
     transition:0.2s;
 }
 
-.card:hover{
-    transform:translateY(-4px);
-}
-
 .card h2{
     margin-top:0;
     color:#3578d6;
@@ -89,6 +85,24 @@ header h1.sub-head{
 .card p{
     line-height:1.8;
     margin-bottom:10px;
+}
+
+/* 管理者専用カード */
+.card.admin-card {
+    background: #f0f7ff;
+    border: 2px dashed #4a90e2;
+}
+
+.card.admin-card h2 {
+    color: #1e88e5;
+}
+
+.btn-admin {
+    background: #34495e;
+}
+
+.btn-admin:hover {
+    background: #2c3e50;
 }
 
 .btn{
@@ -235,6 +249,18 @@ footer{
         </p>
         <a href="easy-ope.html" class="btn">
             操作手順を見る
+        </a>
+    </div>
+
+    <!-- 🔒 管理者用エリア -->
+    <div class="section-title">🔒 管理用リンク</div>
+    <div class="card admin-card">
+        <h2>🔒 管理者専用アカウント情報</h2>
+        <p>
+            公式Instagram、Gmail、施設予約IDなどの各種パスワード情報を閲覧できます。（要管理者パスワード）
+        </p>
+        <a href="admin.html" class="btn btn-admin">
+            管理者ページへ
         </a>
     </div>
 
